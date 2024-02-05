@@ -1,0 +1,110 @@
+.ScenarioContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 500px;
+    margin: 10px;
+    padding: 10px;
+    /* border: 1px solid black; */
+    height: 510px;
+    background-color: white;
+}
+
+
+#importance{
+    width: 50px;
+    margin-left: 10px;
+}
+
+table{
+    text-align: center;
+}
+
+#buttonspan {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#buttonspan > button {
+    height: fit-content;
+}
+
+#buttonspan > h6 {
+    margin: 0;
+}
+
+.tableHeader {
+    border: 2px solid red;
+}
+
+.AdjustValueCont {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin: 10px;
+    padding: 10px;
+    padding-top: 0;
+    height: 510px;
+    background-color: white;
+    /* border: 1px solid black; */
+}
+
+.plo{
+    width: 40px;
+}
+
+#head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+#head > h3 {
+    margin: 0;
+}
+
+.ScenarioInfo{
+    margin-top: 10px;
+    display: flex;
+    gap: 40px
+}
+
+.ScenarioInfo > p {
+    width: 150px;
+    font-weight: 500;
+    margin: 5px;
+}
+
+.ScenarioInfo > input{
+    width: 400px;
+    padding: 0;
+}
+
+.ScenarioInfo > textarea {
+    width: 400px;
+}
+
+#des {
+    height: 60px;
+}
+
+.buttonOptions{
+    margin-top: 20px;
+    display: flex;
+    gap: 30px;
+    align-self: center;
+}
+
+.buttonIcon {
+    transform: scale(1.5);
+    color: red;
+}
+
+i {
+    display: flex;
+    gap: 10px;
+    color: red;
+    cursor: pointer;
+}
