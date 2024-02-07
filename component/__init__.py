@@ -4,11 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 import streamlit.components.v1 as components
-from flask import Flask
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app, resources={r"/streamlit_custom_component/*": {"origins": "https://scenario-analysis-fts4gdemotzc7hsbvyrvsd.streamlit.app/"}})
 
 
 st.set_page_config(layout='wide')
@@ -16,7 +11,6 @@ st.set_page_config(layout='wide')
 page_name = "Select Drivers"
 
 _RELEASE = True
-
 
 
 if 'clicked' not in st.session_state:
