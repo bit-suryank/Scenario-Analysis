@@ -115,14 +115,6 @@ def chart_show():
             for scenario in deleted_scenarios:
                 tdf.drop(scenario, axis=0,inplace=True)
                 chart_data.drop(scenario, axis=1, inplace=True)
-            # for key in list(les):
-            #     # st.write(list(data.keys()))
-            #     # if key in les:
-            #     data.pop(key)
-                
-            # for key in list(les):
-            #     # if key in les:
-            #     tData.pop(key)
 
 
 def selection_box():
@@ -191,24 +183,14 @@ if __name__ == "__main__":
             selection_box()
             if st.session_state.clicked == True:
                 driver_list()
-            # modal = Modal(key="3", title="", padding= 5, max_width=900)
-            # open_modal = st.button('Create Scenario Analysis')
-            # res = None
-            # if open_modal:
-            #     with modal.container():
-            #         res = com()
-            # if res is not None:
-            #     name = res["scenarioName"]
-            #     data[name] = res[name]
-            #     tData[name] = res[name]
             
-            res = None
-            with st.expander('Create Scenario'):
-                res = com()
-                if res is not None:
-                    name = res["scenarioName"]
-                    data[name] = res[name]
-                    tData[name] = res[name]
+                res = None
+                with st.expander('Create Scenario'):
+                    res = com()
+                    if res is not None:
+                        name = res["scenarioName"]
+                        data[name] = res[name]
+                        tData[name] = res[name]
 
 
         if st.session_state.clicked == True:
