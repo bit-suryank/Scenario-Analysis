@@ -14,7 +14,6 @@ page_name = "Select Drivers"
 _RELEASE = True
 
 
-
 if 'clicked' not in st.session_state:
     st.session_state.clicked = False
 
@@ -118,6 +117,7 @@ def chart_show():
             for scenario in deleted_scenarios:
                 tdf.drop(scenario, axis=0,inplace=True)
                 chart_data.drop(scenario, axis=1, inplace=True)
+<<<<<<< HEAD
                 
 def adj_value():
     st.subheader("Scenario Analysis")
@@ -181,6 +181,8 @@ def create_scenario():
     cols[0].write("Total drivers selected: 65%")
     if cols[1].button("Adjust Value"):
         adj_value()
+=======
+>>>>>>> 04d6d31a072bc64094dd71c2b9ad839e9d01cb9a
 
 
 def selection_box():
@@ -265,7 +267,10 @@ if __name__ == "__main__":
                 res = None
                 with st.expander('Create Scenario'):
                     res = com()
+<<<<<<< HEAD
                     # create_scenario()
+=======
+>>>>>>> 04d6d31a072bc64094dd71c2b9ad839e9d01cb9a
                     if res is not None:
                         name = res["scenarioName"]
                         data[name] = res[name]
