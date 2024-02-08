@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 import streamlit.components.v1 as components
+import numpy as np
 
 
 st.set_page_config(layout='wide')
@@ -65,6 +66,8 @@ tData = {
     "Forecast":{"2024-01": 1, "2024-02": 2, "2024-03": 3, "2024-04": 4, "2024-05":12, "2024-06": 8, "2024-07": 3, "2024-08":6, "2024-09": 8}
 }
 
+date = ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09",]
+
 def chart_show():
 
     start = datetime.date(2023, 4, 1)
@@ -115,14 +118,69 @@ def chart_show():
             for scenario in deleted_scenarios:
                 tdf.drop(scenario, axis=0,inplace=True)
                 chart_data.drop(scenario, axis=1, inplace=True)
-            # for key in list(les):
-            #     # st.write(list(data.keys()))
-            #     # if key in les:
-            #     data.pop(key)
                 
-            # for key in list(les):
-            #     # if key in les:
-            #     tData.pop(key)
+def adj_value():
+    st.subheader("Scenario Analysis")
+    df2 = pd.DataFrame({
+        "MUSD": ["DRIVER_1", "DRIVER_2"],
+        "2024-01": [0, 0],
+        "2024-02": [0, 0],
+        "2024-03": [0, 0],
+        "2024-04": [0, 0],
+        "2024-05": [0, 0],
+        "2024-06": [0, 0],
+        "2024-07": [0, 0],
+        "2024-08": [0, 0],
+        "2024-09": [0, 0],
+    }).set_index("MUSD")
+
+    # Display the DataFrame for editing
+
+    st.data_editor(df2)
+    
+    # Inputs for scenario details
+    st.text_input("Scenario Name", key=23)
+    st.text_input("Description", key=2)
+    st.text_input("Scenario Creator", key=3)
+    st.text_input("Comment about forecasted result", key=4)
+
+    # Buttons for actions
+    column = st.columns([1, 1, 1, 1])
+    column[0].button("Run Scenario")
+    column[1].button("Save Scenario")
+    column[2].button("Reset Form")
+    column[3].button("Share")
+
+
+def create_scenario():
+    
+    st.subheader("Select Driver")
+    col = st.columns([2, 1, 1])
+    
+    col[0].write("#")
+    check = col[0].checkbox("show only drivers with importance > ")
+    query = col[1].number_input("")
+    col[2].write("#")
+    col[2].write("%")
+    
+    
+    df = pd.DataFrame({
+      'Driver_Name': ['DRIVER_1', 'DRIVER_2', 'DRIVER_3', 'DRIVER_4'],
+      'Importance (%)':[ 35, 30, 20, 15],
+      'Adj ?':[False, False, False, False]
+    }).set_index('Driver_Name')
+    
+    
+    if check:
+        df = df[df['Importance (%)'] > query]
+        
+    st.data_editor(df, width=700, disabled=["Driver_Name", "Importance (%)"])
+    
+    cols = st.columns([1,1])
+    cols[0].write("#")
+    cols[0].write("Total drivers selected: 65%")
+    if cols[1].button("Adjust Value"):
+        adj_value()
 
 
 def selection_box():
@@ -181,7 +239,19 @@ if __name__ == "__main__":
 
     with open('style.css') as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-        
+    st.markdown(
+        '''
+            <style>
+                .cursor{
+                    background-color: red;
+                    width: 30px;
+                    height: 5px;
+                    margin: 0;
+                }
+            </style>
+            <div class="cursor"></div>
+        ''', unsafe_allow_html=True
+    )    
     st.title("Scenario Analysis - Proof-of-Concept")
     cont = st.container()
     with cont:
@@ -191,24 +261,15 @@ if __name__ == "__main__":
             selection_box()
             if st.session_state.clicked == True:
                 driver_list()
-            # modal = Modal(key="3", title="", padding= 5, max_width=900)
-            # open_modal = st.button('Create Scenario Analysis')
-            # res = None
-            # if open_modal:
-            #     with modal.container():
-            #         res = com()
-            # if res is not None:
-            #     name = res["scenarioName"]
-            #     data[name] = res[name]
-            #     tData[name] = res[name]
             
-            res = None
-            with st.expander('Create Scenario'):
-                res = com()
-                if res is not None:
-                    name = res["scenarioName"]
-                    data[name] = res[name]
-                    tData[name] = res[name]
+                res = None
+                with st.expander('Create Scenario'):
+                    res = com()
+                    # create_scenario()
+                    if res is not None:
+                        name = res["scenarioName"]
+                        data[name] = res[name]
+                        tData[name] = res[name]
 
 
         if st.session_state.clicked == True:
