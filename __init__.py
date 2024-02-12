@@ -117,72 +117,6 @@ def chart_show():
             for scenario in deleted_scenarios:
                 tdf.drop(scenario, axis=0,inplace=True)
                 chart_data.drop(scenario, axis=1, inplace=True)
-<<<<<<< HEAD
-                
-def adj_value():
-    st.subheader("Scenario Analysis")
-    df2 = pd.DataFrame({
-        "MUSD": ["DRIVER_1", "DRIVER_2"],
-        "2024-01": [0, 0],
-        "2024-02": [0, 0],
-        "2024-03": [0, 0],
-        "2024-04": [0, 0],
-        "2024-05": [0, 0],
-        "2024-06": [0, 0],
-        "2024-07": [0, 0],
-        "2024-08": [0, 0],
-        "2024-09": [0, 0],
-    }).set_index("MUSD")
-
-    # Display the DataFrame for editing
-
-    st.data_editor(df2)
-    
-    # Inputs for scenario details
-    st.text_input("Scenario Name", key=23)
-    st.text_input("Description", key=2)
-    st.text_input("Scenario Creator", key=3)
-    st.text_input("Comment about forecasted result", key=4)
-
-    # Buttons for actions
-    column = st.columns([1, 1, 1, 1])
-    column[0].button("Run Scenario")
-    column[1].button("Save Scenario")
-    column[2].button("Reset Form")
-    column[3].button("Share")
-
-
-def create_scenario():
-    
-    st.subheader("Select Driver")
-    col = st.columns([2, 1, 1])
-    
-    col[0].write("#")
-    check = col[0].checkbox("show only drivers with importance > ")
-    query = col[1].number_input("")
-    col[2].write("#")
-    col[2].write("%")
-    
-    
-    df = pd.DataFrame({
-      'Driver_Name': ['DRIVER_1', 'DRIVER_2', 'DRIVER_3', 'DRIVER_4'],
-      'Importance (%)':[ 35, 30, 20, 15],
-      'Adj ?':[False, False, False, False]
-    }).set_index('Driver_Name')
-    
-    
-    if check:
-        df = df[df['Importance (%)'] > query]
-        
-    st.data_editor(df, width=700, disabled=["Driver_Name", "Importance (%)"])
-    
-    cols = st.columns([1,1])
-    cols[0].write("#")
-    cols[0].write("Total drivers selected: 65%")
-    if cols[1].button("Adjust Value"):
-        adj_value()
-=======
->>>>>>> 04d6d31a072bc64094dd71c2b9ad839e9d01cb9a
 
 
 def selection_box():
@@ -267,10 +201,6 @@ if __name__ == "__main__":
                 res = None
                 with st.expander('Create Scenario'):
                     res = com()
-<<<<<<< HEAD
-                    # create_scenario()
-=======
->>>>>>> 04d6d31a072bc64094dd71c2b9ad839e9d01cb9a
                     if res is not None:
                         name = res["scenarioName"]
                         data[name] = res[name]
