@@ -22,6 +22,10 @@ if 'scenario' not in st.session_state:
 
 if 'Adjust' not in st.session_state:
     st.session_state.Adjust = False
+    
+if 'form' not in st.session_state:
+    st.session_state.form = False
+    
 
 if _RELEASE:
     root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -66,6 +70,9 @@ tData = {
 }
 
 date = ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09",]
+
+st.session_state.data = data
+st.session_state.tData = tData
 
 def chart_show():
 
@@ -118,6 +125,100 @@ def chart_show():
                 tdf.drop(scenario, axis=0,inplace=True)
                 chart_data.drop(scenario, axis=1, inplace=True)
 
+
+def save_edited_df(edited_df, scenario_name, description, creator, comment):
+    # Combine edited DataFrame and scenario details into a dictionary
+    scenario_data = {
+        'edited_df': edited_df,
+        'scenario_name': scenario_name,
+        'description': description,
+        'creator': creator,
+        'comment': comment
+    }
+    # Store the data in session state
+    return scenario_data
+
+def create_scenario():
+    dis = True
+    st.subheader("Select Driver")
+    col = st.columns([2, 1, 1])
+
+    col[0].write("#")
+    check = col[0].checkbox("show only drivers with importance > ")
+    query = col[1].number_input("")
+    col[2].write("#")
+    col[2].write("%")
+
+
+    df = pd.DataFrame({
+      'Driver_Name': ['DRIVER_1', 'DRIVER_2', 'DRIVER_3', 'DRIVER_4'],
+      'Importance (%)':[ 35, 30, 20, 15],
+      'Adj':[False, False, False, False]
+    }).set_index('Driver_Name')
+
+
+    if check:
+        df = df[df['Importance (%)'] > query]
+
+    edit_df = st.data_editor(df, width=700, disabled=["Driver_Name", "Importance (%)"])
+
+    selected_rows = list(edit_df[edit_df.Adj].index)
+    
+    if selected_rows:
+        dis = False
+    
+    cols = st.columns([1,1])
+    cols[0].write("#")
+    cols[0].write("Total drivers selected: 65%")
+   
+
+    if cols[1].button("Adjust Value", disabled=dis):
+        st.session_state.form = True
+    
+    if st.session_state.form:
+        adjust_form(selected_rows)
+
+    
+def adjust_form(selected_rows):
+    st.subheader("Scenario Analysis")
+    df2 = pd.DataFrame({
+        "MUSD": selected_rows,
+        "2024-01": 0,
+        "2024-02": 0,
+        "2024-03": 0,
+        "2024-04": 0,
+        "2024-05": 0,
+        "2024-06": 0,
+        "2024-07": 0,
+        "2024-08": 0,
+        "2024-09": 0,
+    }).set_index("MUSD")
+    
+    with st.form("scenario_form", clear_on_submit=True):
+        edit = st.data_editor(df2, width=None)
+        run_dis = True
+        Scenario_Name = st.text_input("Scenario Name", key=23)
+        Description = st.text_input("Description", key=22)
+        Creator = st.text_input("Scenario Creator", key=33)
+        Comment = st.text_input("Comment about forecasted result", key=44)
+        
+        column = st.columns([1, 1, 1, 1], gap="medium")
+        save = column[0].form_submit_button("Save Scenario", type='secondary')
+        run = column[1].form_submit_button("Run Scenario", type='primary')
+        column[2].form_submit_button("Reset Form", type='secondary')
+        column[3].form_submit_button("Share", type='secondary')
+
+        res = {}
+        if save:
+            edit = edit.iloc[range(0,len(selected_rows))].mean()
+            for i in range(0, len(edit)):
+                res[date[i]] = edit[i]
+            data[Scenario_Name] = res
+            tData[Scenario_Name] = res
+        if run:
+            st.session_state.form = False
+            
+        
 
 def selection_box():
 
@@ -184,6 +285,9 @@ if __name__ == "__main__":
                     height: 5px;
                     margin: 0;
                 }
+                div.dvn-scroll-inner.hidden{
+                    overflow: scoll;
+                }
             </style>
             <div class="cursor"></div>
         ''', unsafe_allow_html=True
@@ -198,14 +302,8 @@ if __name__ == "__main__":
             if st.session_state.clicked == True:
                 driver_list()
             
-                res = None
                 with st.expander('Create Scenario'):
-                    res = com()
-                    if res is not None:
-                        name = res["scenarioName"]
-                        data[name] = res[name]
-                        tData[name] = res[name]
-
+                    create_scenario()
 
         if st.session_state.clicked == True:
             subTwoCont = cols[1].container()

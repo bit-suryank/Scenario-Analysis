@@ -63,13 +63,14 @@ def create_scenario():
     cols = st.columns([1,1])
     cols[0].write("Total drivers selected: 65%")
    
-    edit = None
+    edit = {}
     if cols[1].button("Adjust Value", disabled=dis):
         st.session_state.form = True
     
     if st.session_state.form:
-        edit = adjust_form(selected_rows)
-        st.write(edit)
+        adjust_form(selected_rows)
+
+    
 
 
 
@@ -88,7 +89,7 @@ def adjust_form(selected_rows):
         "2024-09": 0,
     }).set_index("MUSD")
     
-   
+    date = ["2024-01", "2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07", "2024-08", "2024-09"]
     # Display the DataFrame for editing
     with st.form("scenario_form"):
         edit = st.data_editor(df2)
@@ -103,50 +104,19 @@ def adjust_form(selected_rows):
         
         column = st.columns([1, 1, 1, 1], gap="medium")
         save = column[0].form_submit_button("Save Scenario", type='secondary')
-        column[1].form_submit_button("Run Scenario", type='primary')
+        run = column[1].form_submit_button("Run Scenario", type='primary')
         column[2].form_submit_button("Reset Form", type='secondary')
         column[3].form_submit_button("Share", type='secondary')
-        
-        # if save:
-        #     result = save_edited_df(edit, Scenario_Name, Description, Creator, Comment)
+
+        res = {}
         if save:
             edit = edit.iloc[range(0,len(selected_rows))].mean()
-            res = {Scenario_Name: edit}
-            # series = pd.read_csv(pd.compat.StringIO(res[Scenario_Name]), delim_whitespace=True, header=None, index_col=0, squeeze=True)
-            series = pd.Series(res[Scenario_Name].split(), dtype=float)
-            series.index = pd.to_datetime(series.index)
-            converted_dict = series.to_dict()
-            data[Scenario_Name] = converted_dict
-
-        
-    return data
+            for i in range(0, len(edit)):
+                res[date[i]] = edit[i]
+            data[Scenario_Name] = res
                    
 
-
-def save_adjustment(df, df2):
-    for index, row in df2.iterrows():
-        for col in df2.columns:
-            df.loc[index, col] = st.session_state[index][col]
 
 with st.expander('Create Scenario'):
     create_scenario()
 
-# adjust_form(["DRIVER_1"])
-
-# df2 = pd.DataFrame({
-#         "MUSD": ["DRIVER_1"],
-#         "2024-01": 0,
-#         "2024-02": 0,
-#         "2024-03": 0,
-#         "2024-04": 0,
-#         "2024-05": 0,
-#         "2024-06": 0,
-#         "2024-07": 0,
-#         "2024-08": 0,
-#         "2024-09": 0,
-#     })
-# with st.form("edit Data"):
-#     edited_df = st.data_editor(df2)
-#     st.form_submit_button("Submit")
-
-# edited_df
