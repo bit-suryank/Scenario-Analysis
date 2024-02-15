@@ -170,7 +170,6 @@ def create_scenario():
         dis = False
     
     cols = st.columns([1,1])
-    cols[0].write("#")
     cols[0].write(f"Total drivers selected: {s}%")
    
 
