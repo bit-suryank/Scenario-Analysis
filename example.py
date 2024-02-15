@@ -57,11 +57,15 @@ def create_scenario():
 
     selected_rows = list(edit_df[edit_df.Adj].index)
     
+    
+    select_impt = list(edit_df[edit_df.Adj]['Importance (%)'])
+    s = sum(select_impt)
+    
     if selected_rows:
         dis = False
     
     cols = st.columns([1,1])
-    cols[0].write("Total drivers selected: 65%")
+    cols[0].write(f"Total drivers selected: {s}%")
    
     edit = {}
     if cols[1].button("Adjust Value", disabled=dis):

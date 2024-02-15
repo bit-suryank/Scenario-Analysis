@@ -163,13 +163,15 @@ def create_scenario():
     edit_df = st.data_editor(df, width=700, disabled=["Driver_Name", "Importance (%)"])
 
     selected_rows = list(edit_df[edit_df.Adj].index)
+    select_impt = list(edit_df[edit_df.Adj]['Importance (%)'])
+    s = sum(select_impt)
     
     if selected_rows:
         dis = False
     
     cols = st.columns([1,1])
     cols[0].write("#")
-    cols[0].write("Total drivers selected: 65%")
+    cols[0].write(f"Total drivers selected: {s}%")
    
 
     if cols[1].button("Adjust Value", disabled=dis):
@@ -274,8 +276,6 @@ def driver_list():
 
 if __name__ == "__main__":
 
-    with open('style.css') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     st.markdown(
         '''
             <style>
@@ -285,8 +285,11 @@ if __name__ == "__main__":
                     height: 5px;
                     margin: 0;
                 }
-                div.dvn-scroll-inner.hidden{
-                    overflow: scoll;
+                div > div.dvn-underlay > div.dvn-scroller.glideDataEditor > div.dvn-scroll-inner.hidden{
+                    overflow: auto;
+                }
+                div.block-container.st-emotion-cache-z5fcl4.ea3mdgi5{
+                    padding: 45px 10px 10px 10px
                 }
             </style>
             <div class="cursor"></div>
